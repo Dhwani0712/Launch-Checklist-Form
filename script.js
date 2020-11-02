@@ -22,7 +22,7 @@ function randomIntiger (max, min = 0) {
    }
    
    function updateCopilot(){
-     copilotStatus.innerHTML = `Pilot ${copilotName.value} Ready`;
+     copilotStatus.innerHTML = `Co-Pilot ${copilotName.value} Ready`;
    }
    
    function updateFuel (){

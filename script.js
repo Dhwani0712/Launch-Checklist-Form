@@ -1,8 +1,6 @@
 // Write your JavaScript code here!
 
-function randomIntiger (max, min = 0) {
-   return Math.trunc(Math.random() * ((max) - min)) + min;
- }
+
  
  window.addEventListener("load", function(){
    let subButton = document.getElementById("formSubmit");
@@ -16,6 +14,7 @@ function randomIntiger (max, min = 0) {
    let cargoStatus = document.getElementById("cargoStatus");
    let faultyItems = document.getElementById("faultyItems");
    let launchStatus = document.getElementById("launchStatus");
+   let missionTarget = document.getElementById("missionTarget");
  
    function updatePilot(){
      pilotStatus.innerHTML = `Pilot ${pilotName.value} Ready`;
@@ -39,8 +38,28 @@ function randomIntiger (max, min = 0) {
      }
      
    }
+   window.fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
+         return response.json().then(function(json) {
+          function randomIntiger (max, min = 0) {
+            return Math.trunc(Math.random() * ((max) - min)) + min;
+          }
+          let i = randomIntiger(json.length);
+            missionTarget.innerHTML = `
+           <h2>Mission Destination</h2>
+            <ol>
+              <li>Name: ${json[i].name}</li>
+              <li>Diameter: ${json[i].diameter}</li>
+              <li>Star: ${json[i].star}</li>
+              <li>Distance from Earth: ${json[i].distance}</li>
+              <li>Number of Moons: ${json[i].moons}</li>
+            </ol>
+            <img src="${json[i].image}">
+            `;
+          
+          });
+        });
  
-   subButton.addEventListener("click", function(event){
+    subButton.addEventListener("click", function(event){
  
      let pilotValid = (pilotName.value !== "" && typeof(pilotName.value)==="string");
      let copilotValid = (copilotName.value !== "" && typeof(copilotName.value)==="string");
@@ -64,6 +83,9 @@ function randomIntiger (max, min = 0) {
        updateCopilot();
        let fuelCheck = updateFuel();
        let cargoCheck = updateCargo();
+       
+      
+       
  
        if (fuelCheck || cargoCheck){
          faultyItems.style.visibility = "visible";
@@ -74,23 +96,7 @@ function randomIntiger (max, min = 0) {
          launchStatus.innerHTML = `Shuttle is ready for launch`;
          launchStatus.style.color = "green";
          event.preventDefault();
-         window.fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
-         response.json().then(function(json){
-           let i = randomIntiger(json.length);
-           let missionTarget = document.getElementById("missionTarget");
-           missionTarget.innerHTML = `
-           <h2>Mission Destination</h2>
-             <ol>
-               <li>Name: ${json[i].name}</li>
-               <li>Diameter: ${json[i].diameter}</li>
-               <li>Star: ${json[i].star}</li>
-               <li>Distance from Earth: ${json[i].distance}</li>
-               <li>Number of Moons: ${json[i].moons}</li>
-             </ol>
-             <img src="${json[i].image}">
-             `;
-           });
-         });
+         
        }
      }
    });
